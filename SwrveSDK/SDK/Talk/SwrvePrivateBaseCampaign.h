@@ -1,3 +1,5 @@
+#import "SwrveBaseCampaign.h"
+
 @class SwrveMessageController;
 
 /*! PRIVATE: Base campaign methods. */
@@ -30,9 +32,6 @@
 
 /*! PRIVATE: Notify when the campaign was displayed. */
 - (void)wasShownToUserAt:(NSDate *)timeShown;
-
-/*! PRIVATE: Add the required assets to the given queue. */
--(void)addAssetsToQueue:(NSMutableSet*)assetsQueue;
 
 /*! PRIVATE: Load the campaign settings. */
 -(void)loadState:(NSDictionary*)settings;

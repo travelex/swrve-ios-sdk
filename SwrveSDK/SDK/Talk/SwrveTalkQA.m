@@ -1,6 +1,8 @@
 #import "SwrveTalkQA.h"
 #import "SwrveCampaign.h"
 #import "SwrveConversationCampaign.h"
+#import "SwrveRESTClient.h"
+#import "SwrvePushConstants.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
@@ -19,9 +21,7 @@ enum
 
 
 @interface Swrve (SwrveTalkQATests)
-
-- (void) sendHttpPOSTRequest:(NSURL*)url jsonData:(NSData*)json completionHandler:(void (^)(NSURLResponse*, NSData*, NSError*))handler;
-
+@property(atomic) SwrveRESTClient *restClient;
 @end
 
 @interface SwrveTalkQA()
@@ -237,7 +237,7 @@ enum
         [note setValue:[aps valueForKey:@"badge"] forKey:@"badge"];
 
         // Notify push notification id if available
-        id push_identifier = [notification objectForKey:@"_p"];
+        id push_identifier = [notification objectForKey:SwrvePushIdentifierKey];
         if (push_identifier && ![push_identifier isKindOfClass:[NSNull class]]) {
             [note setValue:push_identifier forKey:@"id"];
         }
@@ -265,7 +265,8 @@ enum
     NSURL* requestURL = [NSURL URLWithString:endpoint];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
 
-    [[self swrve] sendHttpPOSTRequest:requestURL
+    SwrveRESTClient *restClient = [swrve restClient];
+    [restClient sendHttpPOSTRequest:requestURL
                              jsonData:jsonData
                     completionHandler:^(NSURLResponse* response, NSData* data, NSError* error)
                     {

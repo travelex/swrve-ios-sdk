@@ -36,7 +36,7 @@
 -(UIView*)createViewToFit:(UIView*)view
           thatDelegatesTo:(UIViewController*)delegate
                  withSize:(CGSize)size
-                  rotated:(BOOL) rotated;
+                  rotated:(BOOL)rotated;
 
 /*! Create a view to display this format.
  *
@@ -50,4 +50,3 @@
                  withSize:(CGSize)sizeParent;
 
 @end
-

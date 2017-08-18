@@ -24,10 +24,6 @@
     return self;
 }
 
--(BOOL) willRequireLandscape {
-    return YES;
-}
-
 -(void) stop {
     [webview setDelegate:nil];
     // Stop the running video - this will happen on a page change.
@@ -114,6 +110,23 @@
 
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
 #pragma unused(webView, request, navigationType)
+    NSURL* nsurl = [request URL];
+    
+    // Check if the navigation is coming from a user clicking on a link
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:nsurl];
+        return NO;
+    }
+    
+    // Check if the youtube link that is opening is the logo that redirects to the full website
+    if (nsurl != nil) {
+        NSString* url = nsurl.absoluteString;
+        if ([url containsString:@"youtube.com/"] && ![url containsString:@"youtube.com/embed/"]) {
+            [[UIApplication sharedApplication] openURL:nsurl];
+            return NO;
+        }
+    }
+    
     return !preventNavigation;
 }
 
@@ -125,8 +138,7 @@
     webview.frame = frame;
 }
 
-// iOS8+
--(void)viewWillTransitionToSize:(CGSize)size {
+-(void)parentViewChangedSize:(CGSize)size {
     // Mantain full width
     _view.frame = CGRectMake(0, 0, size.width, _view.frame.size.height);
 }

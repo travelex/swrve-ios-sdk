@@ -1,4 +1,5 @@
 #import "SwrveContentImage.h"
+#import "SwrveCommon.h"
 
 @interface SwrveContentImage () {
     UIImageView *iv;
@@ -16,9 +17,8 @@
 -(void) loadViewWithContainerView:(UIView*)containerView {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
-        NSString* cache = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-        NSString* swrve_folder = @"com.ngt.msgs";
-        NSURL* bgurl = [NSURL fileURLWithPathComponents:[NSArray arrayWithObjects:cache, swrve_folder, self.value, nil]];
+        NSString *cacheFolder = [SwrveCommon swrveCacheFolder];
+        NSURL* bgurl = [NSURL fileURLWithPathComponents:[NSArray arrayWithObjects:cacheFolder, self.value, nil]];
         self->image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:bgurl]];
         [self sizeAndDisplayInContainer:containerView];
     });
@@ -28,8 +28,8 @@
 {
     if (image != nil) {
         // Create _view and add image to it
-        _view = iv = [[UIImageView alloc] init];
         dispatch_async(dispatch_get_main_queue(), ^{
+            self->_view = self->iv = [[UIImageView alloc] init];
             // Image setting and manipulation should be done on the main thread, otherwise this slows down a lot on iOS 7
             self->iv.image = self->image;
             CGFloat containerWidth = containerView.frame.size.width;
@@ -48,8 +48,7 @@
     _view.frame = [self newFrameForOrientationChange];
 }
 
-// iOS8+
--(void)viewWillTransitionToSize:(CGSize)size
+-(void)parentViewChangedSize:(CGSize)size
 {
     // Mantain full width
     CGSize imageSize = image.size;

@@ -2,7 +2,7 @@
 #import "SwrveMessageEventHandler.h"
 #include <UIKit/UIKit.h>
 
-const static int CONVERSATION_VERSION = 3;
+const static int CONVERSATION_VERSION = 4;
 
 @class SwrveConversationPane;
 
@@ -21,12 +21,6 @@ const static int CONVERSATION_VERSION = 3;
  * \returns Parsed conversation.
  */
 +(SwrveBaseConversation*)fromJSON:(NSDictionary*)json forController:(id<SwrveMessageEventHandler>)controller;
-
-/*! Load the storyboard resource.
- *
- * \returns UIStoryboard if loaded successfully.
- */
-+(UIStoryboard*)loadStoryboard;
 
 /*! Check if assets are downloaded.
  *
@@ -48,5 +42,10 @@ const static int CONVERSATION_VERSION = 3;
 
 -(SwrveConversationPane*)pageForTag:(NSString*)tag;
 
+/*! Check if font is given style is system font.
+ *
+ * \returns TRUE if font to use is system font.
+ */
++(BOOL)isSystemFont:(NSDictionary *)style;
 
 @end

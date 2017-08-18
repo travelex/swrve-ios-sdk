@@ -19,7 +19,7 @@
 
 + (ISHPermissionRequest *)requestForCategory:(ISHPermissionCategory)category {
     ISHPermissionRequest *request = nil;
-    
+
     switch (category) {
 #if !defined(SWRVE_NO_LOCATION)
 
@@ -38,10 +38,10 @@
 
 #endif //!defined(SWRVE_NO_PHOTO_LIBRARY)
 #if !defined(SWRVE_NO_PHOTO_CAMERA)
+
         case ISHPermissionCategoryPhotoCamera:
             request = [ISHPermissionRequestPhotoCamera new];
             break;
-
 #endif //#!defined(SWRVE_NO_PHOTO_CAMERA)
 #if !defined(SWRVE_NO_ADDRESS_BOOK)
 
@@ -50,21 +50,22 @@
             break;
 
 #endif //!defined(SWRVE_NO_ADDRESS_BOOK)
+
 #if !defined(SWRVE_NO_PUSH)
         case ISHPermissionCategoryNotificationRemote:
             request = [ISHPermissionRequestNotificationsRemote new];
             break;
-            
+
 #endif //!defined(SWRVE_NO_PUSH)
-            
+
         default:
             break;
     }
-    
+
     if (request != nil) {
         [request setPermissionCategory:category];
     }
-    
+
     NSAssert(request, @"Request not implemented for category %@", @(category));
     return request;
 }
